@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace netcore1.Migrations
 {
-    public partial class Create : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,20 +21,6 @@ namespace netcore1.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Spending_Details",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    DateTime = table.Column<DateTime>(nullable: false),
-                    Note = table.Column<string>(maxLength: 100, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Spending_Details", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -224,9 +210,10 @@ namespace netcore1.Migrations
                     Money = table.Column<int>(nullable: false),
                     revenue_and_expenditure = table.Column<int>(nullable: false),
                     Status = table.Column<int>(nullable: false),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    Note = table.Column<string>(maxLength: 100, nullable: true),
                     UserId = table.Column<int>(nullable: false),
-                    BankId = table.Column<int>(nullable: false),
-                    Spd_DetailId = table.Column<int>(nullable: false)
+                    BankId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -235,12 +222,6 @@ namespace netcore1.Migrations
                         name: "FK_Spendings_Banks_BankId",
                         column: x => x.BankId,
                         principalTable: "Banks",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Spendings_Spending_Details_Spd_DetailId",
-                        column: x => x.Spd_DetailId,
-                        principalTable: "Spending_Details",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -276,11 +257,6 @@ namespace netcore1.Migrations
                 name: "IX_Spendings_BankId",
                 table: "Spendings",
                 column: "BankId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Spendings_Spd_DetailId",
-                table: "Spendings",
-                column: "Spd_DetailId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Spendings_UserId",
@@ -346,9 +322,6 @@ namespace netcore1.Migrations
 
             migrationBuilder.DropTable(
                 name: "Banks");
-
-            migrationBuilder.DropTable(
-                name: "Spending_Details");
 
             migrationBuilder.DropTable(
                 name: "Roles");

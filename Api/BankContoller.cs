@@ -1,3 +1,4 @@
+
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,12 +40,14 @@ namespace my_new_app
             return NotFound();
         }
          [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Bank model)
+        public async Task<IActionResult> Create([FromBody] Bank model, int ? userId=null)
         {
             if (!ModelState.IsValid)// bắt lỗi string
             {
                 return BadRequest("Dữ liệu không chuẩn");
             }
+             userId = Convert.ToInt32(userId);
+            model.UserId = userId.Value;
             db.Banks.Add(model);
             await db.SaveChangesAsync();
 

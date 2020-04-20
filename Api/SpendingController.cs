@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -5,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using netcore1.Data;
 using netcore1.Models;
 
-namespace my_new_app.Controllers
+namespace netcore1.Controllers
 {
     [Route("api/spendings")]
     public class SpendingController : Controller
@@ -16,27 +17,24 @@ namespace my_new_app.Controllers
         {
             this.db = dbContext;
         }
-        // [HttpGet]
+        [HttpGet]
         // public async Task<IActionResult> GetAll(string search = null)
         // {
         //      var list =await db.Sp.ToListAsync();
         //     return Ok(list);
         // }
 
-        //   public async Task<IActionResult> GetAll(string search = null)
-        // {
-        //     var list =await db.Spending_Details.Select(item => new{
-        //         item.Id,
-        //         item.DateTime,
-        //         Spending =new {
-        //             item.Spending.Money,
-        //             item.Spending.Id,
-        //             item.Spending.revenue_and_expenditure,
-        //             item.Spending.Purpose
-        //         }
-        //     }).ToListAsync();
-        //     return Ok(list);
-        // }
+          public async Task<IActionResult> GetAll(int ? userId = null)
+        {
+             var query = db.Spendings.AsQueryable();
+            if(userId.HasValue)
+            {// tồn tại userId
+                userId = Convert.ToInt32(userId);
+                query = query.Where(item =>item.UserId== userId);
+            }
+                var data = await query.ToListAsync();
+                return Ok(data);
+        }
           [HttpGet("{id}")]
           public async Task<IActionResult> GetSpending(int id)
         { 
@@ -48,13 +46,15 @@ namespace my_new_app.Controllers
             return NotFound();
         }
          [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Spending model)
+        public async Task<IActionResult> Create([FromBody] Spending model,int ? userId = null)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Dữ liệu sai");
             }
-
+            userId = Convert.ToInt32(userId);
+            model.UserId = userId.Value;
+            model.CreateTime= DateTime.Now;
             db.Spendings.Add(model);
             await db.SaveChangesAsync();
 
@@ -72,8 +72,10 @@ namespace my_new_app.Controllers
             var found = await db.Spendings.FindAsync(id);
             if (found != null)
             {
+                found.UserId= model.UserId;
                 found.Purpose = model.Purpose;
                 found.Money =model.Money;
+                found.CreateTime= model.CreateTime;
                 await db.SaveChangesAsync();
 
                 return Ok(found);

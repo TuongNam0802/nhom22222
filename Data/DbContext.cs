@@ -33,7 +33,6 @@ namespace netcore1.Data
 
         public DbSet<Spending> Spendings { get; set; }
         public DbSet<Bank> Banks { get; set; }
-        public DbSet<Spending_Detail> Spending_Details { get; set; }
 
     }
 }

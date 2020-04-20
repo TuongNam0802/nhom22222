@@ -10,8 +10,8 @@ using netcore1.Data;
 namespace netcore1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200418185152_Create")]
-    partial class Create
+    [Migration("20200420031740_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -252,15 +252,19 @@ namespace netcore1.Migrations
                     b.Property<int>("BankId")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<int>("Money")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Purpose")
                         .HasColumnType("character varying(50)")
                         .HasMaxLength(50);
-
-                    b.Property<int>("Spd_DetailId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -275,30 +279,9 @@ namespace netcore1.Migrations
 
                     b.HasIndex("BankId");
 
-                    b.HasIndex("Spd_DetailId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Spendings");
-                });
-
-            modelBuilder.Entity("netcore1.Models.Spending_Detail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Note")
-                        .HasColumnType("character varying(100)")
-                        .HasMaxLength(100);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Spending_Details");
                 });
 
             modelBuilder.Entity("netcore1.Models.UserRole", b =>
@@ -380,12 +363,6 @@ namespace netcore1.Migrations
                     b.HasOne("netcore1.Models.Bank", "Bank")
                         .WithMany("Spendings")
                         .HasForeignKey("BankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("netcore1.Models.Spending_Detail", "Spending_Details")
-                        .WithMany()
-                        .HasForeignKey("Spd_DetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

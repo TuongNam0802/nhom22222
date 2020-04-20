@@ -75,7 +75,7 @@ namespace Netcore1.Controllers
                     Password = model.Password,
                     Email = model.Email,
                     FullName = model.FullName,
-                    Address = model.Address,
+                    Address = model.Address
                 };
 
                 var result = await userManager.CreateAsync(user, model.Password);
