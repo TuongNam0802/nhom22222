@@ -29,32 +29,37 @@ namespace netcore1.Controllers
              .Select(g => new { g.Key.Year, g.Key.Month, Name = g.Key.revenue_and_expenditure, Tong = g.Sum(i => i.Money) })
              .OrderBy(x => x.Year).ThenBy(x => x.Month);
 
-
-            // var Thongke = new List<Thongke>();
-            // foreach (var item in query)
-            // {
-            //     if (item.Name == 0)
-            //     {
-            //         Thongke.Add(new Thongke() { Tong = "thu", sum = item.Sum });
-            //     }
-
-            //     Thongke.Add(new Thongke() { name = "chi", sum = item.Sum });
-
-            // }
-
+            var thongke1 = new List<thongke>();
+            foreach (var item in query)
+            {
+                if (item.Name == 0)
+                {
+                    thongke1.Add(new thongke() { Year = item.Year, Month = item.Month, Name = item.Name, Thu = item.Tong });
+                }
+                else
+                {
+                    thongke1.Add(new thongke() { Year = item.Year, Month = item.Month, Name = item.Name, Chi = item.Tong });
+                }
+            }
             //  // Tổng thu chi của người dùng
             // var query = list.GroupBy(s =>s.Spending.revenue_and_expenditure)
             //                         .Select( s => new {Name = s.Key ,Tổngthuchi =s.Sum( i =>i.Spending.Money)});
-            return Ok(query);
+            return Ok(thongke1);
 
         }
+
+
+        class thongke
+        {
+
+            public int Name { get; set; }
+            public int Thu { get; set; }
+            public int Chi { get; set; }
+            public int Year { get; set; }
+            public int Month { get; set; }
+
+        }
+
     }
 
-    // class Thongke
-    // {
-        
-    //     public string name { get; set; }
-    //     public int sum { get; set; }
-
-    // }
 }
