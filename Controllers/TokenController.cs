@@ -74,7 +74,7 @@ namespace Netcore1.Controllers
 
             var expires = now.Add(TimeSpan.FromDays(15));
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("AloAlo..."));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Ngay xua co mot con bo..."));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             // Create the JWT and write it to a string
