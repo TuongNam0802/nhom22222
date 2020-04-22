@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,11 +15,6 @@ namespace netcore1.Models
         [ForeignKey("UserId")]
         public virtual ApplicationUser ApplicationUsers { get;set; }
        public ICollection<Spending> Spendings{ get;set; }
-
-        internal object Sum(Func<object, object> p)
-        {
-            throw new NotImplementedException();
-        }
-        //  public List<Spending_Detail> OtherSpenDetails {set; get;}
+      //  public List<Spending_Detail> OtherSpenDetails {set; get;}
     }
 }
