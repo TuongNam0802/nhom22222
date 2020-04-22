@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/account';
 import { bindActionCreators } from 'redux'
-
+import {Link} from 'react-router-dom';
 // reactstrap components
 import {
     Button,
@@ -18,7 +18,6 @@ import {
     Container,
     Col
 } from "reactstrap";
-
 class LoginPage extends React.Component {
     constructor(props) {
         super(props);
@@ -119,28 +118,14 @@ class LoginPage extends React.Component {
                                             >
                                                 Login
                                         </Button>
-                                            {/* <div className="pull-left">
+                                            <div className="pull-left">
                                                 <h6>
-                                                    <a
-                                                        className="link"
-                                                        href="#pablo"
-                                                        onClick={e => e.preventDefault()}
-                                                    >
+                                                    <Link to ="/dang-ky">
                                                         Create Account
-                                                </a>
+                                                </Link>
                                                 </h6>
                                             </div>
-                                            <div className="pull-right">
-                                                <h6>
-                                                    <a
-                                                        className="link"
-                                                        href="#pablo"
-                                                        onClick={e => e.preventDefault()}
-                                                    >
-                                                        Need Help?
-                                                </a>
-                                                </h6>
-                                            </div> */}
+                                
                                         </CardFooter>
                                     </Form>
                                 </Card>

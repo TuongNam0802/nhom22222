@@ -1,9 +1,5 @@
-export const types = {
-    LOGIN_SUCCESS: 'ACCOUNT_LOGIN_SUCCESS',
-    LOGIN_ERROR: 'ACCOUNT_LOGIN_ERROR',
-}
-
-
+import *as types from './../constanst/acctiontype';
+import apiColler from './../apiColler';
 export const login = (username, password) => {
     return function (dispatch) {
         fetch('https://localhost:5001/token', {
@@ -31,12 +27,26 @@ export const login = (username, password) => {
     }
 }
 
-export const login2 = (username, password) => {
-    return {
-        url: 'https://localhost:5001/token',
-        method: 'POST',
-        data: { username, password },
-        onSuccess: types.LOGIN_SUCCESS,
-        onError: types.LOGIN_ERROR
+export const actAddUserRequest = (users) => {
+    return dispatch => {
+        return apiColler('users', 'POST', users).then(res => {
+            dispatch(actAddUser(res.data));
+         })
     }
 }
+export const actAddUser = (users) => {
+    return {
+        type: types.ADD_ACCOUNT,
+        users
+    }
+}
+
+// export const login2 = (username, password) => {
+//     return {
+//         url: 'https://localhost:5001/token',
+//         method: 'POST',
+//         data: { username, password },
+//         onSuccess: types.LOGIN_SUCCESS,
+//         onError: types.LOGIN_ERROR
+//     }
+// }
