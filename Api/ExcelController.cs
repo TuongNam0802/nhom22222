@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using netcore1.Data;
@@ -20,13 +21,21 @@ namespace netcore1.Controllers
             this.db = dbContext;
         }
         [HttpGet]
-        public IActionResult Export()
+        public async Task<IActionResult> Export(int ? userId = null)
         {
-            var data = db.Spendings.ToList();
-
+            
+            var list = db.Spendings.AsQueryable();
+            if(userId.HasValue){
+                userId = Convert.ToInt32(userId);
+                list = list.Where(k =>k.UserId == userId);
+            }
+            var data = await list.ToListAsync();
+            
             var query = data.GroupBy(r => new { r.CreateTime.Year, r.CreateTime.Month, r.revenue_and_expenditure })
-             .Select(g => new { Year = g.Key.Year, Month = g.Key.Month, Name = g.Key.revenue_and_expenditure, Tổngthuchi = g.Sum(i => i.Money) })
+             .Select(g => new { Year = g.Key.Year, Month = g.Key.Month, Name = g.Key.revenue_and_expenditure, Tong = g.Sum(i => i.Money) })
              .OrderBy(x => x.Year).ThenBy(x => x.Month);
+
+            
             var stream = new MemoryStream();
 
             using (var package = new ExcelPackage(stream))
@@ -88,14 +97,14 @@ namespace netcore1.Controllers
                     {
 
                         sheet.Cells[rowIdx + 3, 2].Value = "Số tiền kiếm được";
-                        sheet.Cells[rowIdx + 3, 3].Value = item1.Tổngthuchi;
+                        sheet.Cells[rowIdx + 3, 3].Value = item1.Tong;
 
                     }
                     else
                     {
 
                         sheet.Cells[rowIdx + 3, 2].Value = "Số tiền chi tiêu";
-                        sheet.Cells[rowIdx + 3, 3].Value = item1.Tổngthuchi;
+                        sheet.Cells[rowIdx + 3, 3].Value = item1.Tong;
                         using (var range = sheet.Cells[rowIdx + 3, 1, rowIdx + 3, 10])
                         {
                             range.Style.Font.Color.SetColor((OfficeOpenXml.Style.ExcelIndexedColor)ConsoleColor.Red);

@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using netcore1.Data;
-using netcore1.Models;
 
 namespace netcore1
 {
@@ -19,10 +17,16 @@ namespace netcore1
             this.db = dbContext;
         }
         [HttpGet]
-        public async Task<IActionResult> GetSum()
+        public async Task<IActionResult> GetSum(int ? userId = null)
         {
-            var list =await db.Banks.ToListAsync();
-            var query =  list.Sum(i => i.RedMoney);
+
+            var list = db.Banks.AsQueryable();
+            if(userId.HasValue){
+                userId = Convert.ToInt32(userId);
+                list = list.Where(k =>k.UserId == userId);
+            }
+            var data = await list.ToListAsync();
+            var query = data.Sum(i => i.RedMoney);
             return Ok(query);
         }
 
